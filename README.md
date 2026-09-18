@@ -139,4 +139,4 @@ Self-hosting is a first-class option, not an afterthought — run this exact rep
 
 ## License
 
-MIT — free and open source.
+NOT YET PREPARED FOR RELEASE
