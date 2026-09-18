@@ -1,4 +1,4 @@
-# characterPro
+# characterAt
 
 A web app for writers to build living "dossiers" for the characters in their novels, scripts, and games — premise, backstory, chapter/scene bookmarks, rough dialogue collections — and turn them into shareable cards for friends to see, rate, and react to.
 
@@ -27,7 +27,7 @@ A web app for writers to build living "dossiers" for the characters in their nov
 ## Project structure
 
 ```
-characterpro/
+characterAt/
 ├── client/                  # Vue app
 │   └── src/
 │       ├── assets/
@@ -64,7 +64,7 @@ characterpro/
 
 ```bash
 git clone <your-repo-url>
-cd characterpro
+cd characterAt
 
 cd client && npm install
 cd ../server && npm install
