@@ -79,7 +79,7 @@ async function handleLogout() {
 }
 
 .app-nav__logo-img {
-  height: 1.75rem; /* keeps any uploaded logo a consistent nav height regardless of its native size */
+  height: 2.5rem; /* keeps any uploaded logo a consistent nav height regardless of its native size */
   width: auto;
 }
 

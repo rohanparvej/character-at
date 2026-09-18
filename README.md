@@ -1,4 +1,8 @@
-# characterAt
+<p align="center">
+  <img src="client/public/logo.svg" alt="characterPro logo" width="120" />
+</p>
+
+# characterPro
 
 A web app for writers to build living "dossiers" for the characters in their novels, scripts, and games — premise, backstory, chapter/scene bookmarks, rough dialogue collections — and turn them into shareable cards for friends to see, rate, and react to.
 
@@ -27,7 +31,7 @@ A web app for writers to build living "dossiers" for the characters in their nov
 ## Project structure
 
 ```
-characterAt/
+characterpro/
 ├── client/                  # Vue app
 │   └── src/
 │       ├── assets/
@@ -64,7 +68,7 @@ characterAt/
 
 ```bash
 git clone <your-repo-url>
-cd characterAt
+cd characterpro
 
 cd client && npm install
 cd ../server && npm install
@@ -74,7 +78,7 @@ cd ../server && npm install
 
 **`server/.env`**
 ```
-MONGODB_URI=mongodb://localhost:27017/characterAt
+MONGODB_URI=mongodb://localhost:27017/characterpro
 JWT_SECRET=<a long random string>
 CLIENT_URL=http://localhost:5173
 PORT=5000
@@ -135,4 +139,4 @@ Self-hosting is a first-class option, not an afterthought — run this exact rep
 
 ## License
 
-NOT YET PREPARED FOR RELEASE
+MIT — free and open source.

@@ -15,5 +15,5 @@
  * just set LOGO_URL to that URL string directly instead of importing
  * a local file.
  */
-export const LOGO_URL = '' // e.g. '/logo.svg' or an imported asset — empty means "use text fallback"
+export const LOGO_URL = '/logo.svg' // e.g. '/logo.svg' or an imported asset — empty means "use text fallback"
 export const APP_NAME = 'characterAt'
