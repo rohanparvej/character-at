@@ -20,7 +20,7 @@
  * Keeps things 100% FOSS/dependency-free for this piece.
  */
 
-const DB_NAME = 'characterpro'
+const DB_NAME = 'characterAt'
 const DB_VERSION = 1
 const STORE_NAME = 'characters'
 

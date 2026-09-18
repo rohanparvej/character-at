@@ -19,7 +19,7 @@
     </Transition>
   </router-view>
   <div v-else class="app-loading">
-    <span class="app-loading__text">characterPro</span>
+    <span class="app-loading__text">characterAt</span>
   </div>
 </template>
 
@@ -51,7 +51,7 @@ body {
   background: #14131f; /* ink-950 */
 }
 
-/* Unscoped (no "scoped" attribute) deliberately — page transition
+/* Unscoped (no "scoped" attribute) deliberately - page transition
    classes need to apply globally, since <Transition> targets whatever
    route component is currently mounted, not something inside App.vue
    itself.

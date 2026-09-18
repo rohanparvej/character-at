@@ -9,7 +9,7 @@
     <div class="oss__inner">
       <h2 class="oss__heading">Built in the open</h2>
       <p class="oss__body">
-        characterPro is free and open source, released under the MIT license.
+        characterAt is free and open source, released under the MIT license.
         Read the code, file an issue, or open a pull request — every contribution helps.
       </p>
       <a

@@ -46,5 +46,5 @@ export function exportCharacterAsFile(character) {
  * "Export Library (Cloud)" button.
  */
 export function exportLibraryAsFile(characters) {
-  downloadJSON(characters, `characterpro-library-${new Date().toISOString().slice(0, 10)}.json`)
+  downloadJSON(characters, `characterAt-library-${new Date().toISOString().slice(0, 10)}.json`)
 }
