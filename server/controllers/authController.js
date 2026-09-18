@@ -46,10 +46,20 @@ function formatUserResponse(user) {
 // can't read it (protects against XSS stealing the token). Called by
 // both signup and login so the cookie config never drifts out of sync.
 function setAuthCookie(res, token) {
+  const isProduction = process.env.NODE_ENV === 'production'
+
+  // FIX: sameSite must be 'none' in production. Locally, frontend and
+  // backend both run on "localhost" (just different ports) — browsers
+  // treat that as same-site, so 'lax' works fine there. In production,
+  // Cloudflare Pages (*.pages.dev) and Render (*.onrender.com) are
+  // genuinely DIFFERENT sites — 'lax' cookies are never sent on
+  // cross-site fetch() requests (only on direct link navigation),
+  // which is why /auth/me was returning 401 and refresh signed you out.
+  // 'none' requires secure: true, which is already true in production.
   res.cookie('token', token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production', // HTTPS-only in prod
-    sameSite: 'lax', // CSRF protection baseline
+    secure: isProduction,
+    sameSite: isProduction ? 'none' : 'lax',
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days, matches JWT expiry above
   })
 }
