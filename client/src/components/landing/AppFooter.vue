@@ -8,7 +8,7 @@
 <template>
   <footer class="footer">
     <p class="footer__text">
-      characterPro is free and open source.
+      characterAt is free and open source.
       <a
         href="https://github.com/"
         target="_blank"

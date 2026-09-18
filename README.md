@@ -74,7 +74,7 @@ cd ../server && npm install
 
 **`server/.env`**
 ```
-MONGODB_URI=mongodb://localhost:27017/characterpro
+MONGODB_URI=mongodb://localhost:27017/characterAt
 JWT_SECRET=<a long random string>
 CLIENT_URL=http://localhost:5173
 PORT=5000
