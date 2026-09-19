@@ -2,7 +2,7 @@
   <img src="client/public/logo.svg" alt="characterPro logo" width="120" />
 </p>
 
-# characterPro (ALPHA)
+# characterAt (ALPHA)
 
 A web app for writers to build living "dossiers" for the characters in their novels, scripts, and games — premise, backstory, chapter/scene bookmarks, rough dialogue collections — and turn them into shareable cards for friends to see, rate, and react to.
 
@@ -31,7 +31,7 @@ A web app for writers to build living "dossiers" for the characters in their nov
 ## Project structure
 
 ```
-characterpro/
+characterAt/
 ├── client/                  # Vue app
 │   └── src/
 │       ├── assets/
@@ -78,7 +78,7 @@ cd ../server && npm install
 
 **`server/.env`**
 ```
-MONGODB_URI=mongodb://localhost:27017/characterpro
+MONGODB_URI=mongodb://localhost:27017/characterAt
 JWT_SECRET=<a long random string>
 CLIENT_URL=http://localhost:5173
 PORT=5000
