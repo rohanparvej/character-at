@@ -2,7 +2,7 @@
   <img src="client/public/logo.svg" alt="characterPro logo" width="120" />
 </p>
 
-# characterPro
+# characterPro (ALPHA)
 
 A web app for writers to build living "dossiers" for the characters in their novels, scripts, and games — premise, backstory, chapter/scene bookmarks, rough dialogue collections — and turn them into shareable cards for friends to see, rate, and react to.
 

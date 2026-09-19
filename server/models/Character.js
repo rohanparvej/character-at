@@ -44,6 +44,15 @@ const characterSchema = new mongoose.Schema(
       required: true,
       index: true, // characters are almost always queried by ownerId, index it
     },
+    // The crypto.randomUUID() id this character has in the browser's
+    // IndexedDB (see client/src/utils/indexedDB.js). Mongo generates
+    // its own _id for this document, so localId is what lets a repeat
+    // "Save to Cloud" / bulk sync recognize "this is the same character
+    // as before, update it" instead of creating a duplicate every time.
+    // Sparse + compound-unique with ownerId: two different users can
+    // (coincidentally) never collide, and the same user can't end up
+    // with two cloud rows for one local character.
+    localId: { type: String, index: true },
     name: { type: String, required: true, trim: true },
     premise: { type: String, default: '' },
     characterType: { type: String, default: '' },
@@ -57,5 +66,11 @@ const characterSchema = new mongoose.Schema(
     timestamps: true,
   }
 )
+
+// One cloud row per (owner, local character) — lets findOneAndUpdate
+// with upsert:true in characterController.js key off {ownerId, localId}
+// safely. `sparse: true` so older/cloud-only documents with no localId
+// don't collide with each other under the unique constraint.
+characterSchema.index({ ownerId: 1, localId: 1 }, { unique: true, sparse: true })
 
 module.exports = mongoose.model('Character', characterSchema)

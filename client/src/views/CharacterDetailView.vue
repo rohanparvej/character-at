@@ -284,9 +284,7 @@ async function handleSaveToCloud() {
     clearTimeout(noticeTimeout)
     noticeTimeout = setTimeout(() => (noticeVisible.value = false), 5000)
   } catch (err) {
-    // Expected to fail until the backend route exists — see the
-    // comment block at the top of characterService.js.
-    syncError.value = 'Could not sync right now. (Backend endpoint not set up yet?)'
+    syncError.value = 'Could not sync to the cloud right now. Please try again.'
     console.error(err)
   } finally {
     isSyncing.value = false

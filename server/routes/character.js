@@ -1,22 +1,21 @@
 /**
  * routes/character.js
  * ----------------------
- * Currently only wires up the export endpoints. When you write
- * characterController.js (create/update/delete/sync), add those
- * routes to this SAME file — don't create a separate routes file for
- * them, since they all operate on the same /api/characters resource.
- *
- * Example of what you'll add:
- *   router.post('/sync', requireAuth, syncCharacter)
- *   router.delete('/:id', requireAuth, deleteCharacter)
+ * Defines endpoints for /api/characters.
+ * Combines reading/export endpoints with write/sync cloud operations.
  */
 const express = require('express')
 const router = express.Router()
 const { exportLibrary, exportSingleCharacter } = require('../controllers/characterExportController')
+const { saveSingleCharacter, saveBulkCharacters } = require('../controllers/characterController')
 const { requireAuth } = require('../middleware/auth')
 
-// Both require login — guests have no server-side library to export from.
+// Export / Read operations
 router.get('/export', requireAuth, exportLibrary)
 router.get('/:id/export', requireAuth, exportSingleCharacter)
+
+// Import / Write / Sync operations
+router.post('/', requireAuth, saveSingleCharacter)
+router.post('/sync', requireAuth, saveBulkCharacters)
 
 module.exports = router

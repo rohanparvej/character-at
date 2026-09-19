@@ -1,33 +1,31 @@
 /**
  * services/characterService.js
  * --------------------------------
- * saveToCloud: still waiting on your characterController.js (the sync
- * endpoint) — see the detailed note further down, unchanged from before.
+ * saveToCloud: pushes ONE local character up to MongoDB —
+ * POST /api/characters (characterController.js's saveSingleCharacter).
+ * saveLibraryToCloud: pushes the WHOLE local library up in one call —
+ * POST /api/characters/sync (saveBulkCharacters). Both upsert by the
+ * character's IndexedDB id (sent as `id` in the body, stored server-side
+ * as `localId`), so calling either again for the same character updates
+ * its existing cloud row instead of creating a duplicate.
  *
- * exportLibraryFromCloud / exportSingleCharacterFromCloud: NEW, and
- * these work right now against the export endpoints I built in
- * routes/character.js + controllers/characterExportController.js.
- * They'll just return an empty library until sync exists, since
- * there's nothing in MongoDB to export yet — that's expected, not a bug.
+ * exportLibraryFromCloud / exportSingleCharacterFromCloud: read the
+ * other direction — pull what's already in MongoDB back down as JSON,
+ * against the export endpoints in controllers/characterExportController.js.
  */
 import { apiFetch } from '../utils/apiClient'
 
 async function saveToCloud(character) {
-  // ⚠️ BACKEND NOT BUILT YET — THIS IS YOUR PRACTICE PIECE ⚠️
-  // Needs POST /api/characters/sync (upsert) in characterController.js,
-  // mirroring authController.js's shape: validate → ownership → try/catch.
-  //
-  // ID GOTCHA TO HANDLE: character.id here is a crypto.randomUUID()
-  // string from IndexedDB (see utils/indexedDB.js), NOT a MongoDB
-  // ObjectId. Mongo's default _id expects its own ObjectId format, so
-  // you have two options in your Character schema:
-  //   1. Add a separate `localId: String` field to store this UUID,
-  //      and let Mongo generate its own _id as normal — then "upsert"
-  //      means findOneAndUpdate({ localId, ownerId }, ..., { upsert: true }).
-  //   2. Override _id itself to accept a String instead of ObjectId in
-  //      the schema (works, but a bit unconventional for Mongoose).
-  // Option 1 is the more common pattern — recommend going with that.
-  return apiFetch('/characters/sync', { method: 'POST', body: character })
+  const { character: saved } = await apiFetch('/characters', { method: 'POST', body: character })
+  return saved
+}
+
+async function saveLibraryToCloud(characters) {
+  const { characters: saved, message } = await apiFetch('/characters/sync', {
+    method: 'POST',
+    body: { characters },
+  })
+  return { characters: saved, message }
 }
 
 async function exportLibraryFromCloud() {
@@ -40,4 +38,9 @@ async function exportSingleCharacterFromCloud(id) {
   return character
 }
 
-export default { saveToCloud, exportLibraryFromCloud, exportSingleCharacterFromCloud }
+export default {
+  saveToCloud,
+  saveLibraryToCloud,
+  exportLibraryFromCloud,
+  exportSingleCharacterFromCloud,
+}

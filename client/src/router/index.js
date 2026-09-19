@@ -15,6 +15,11 @@ const routes = [
     name: 'landing',
     component: LandingView,
   },
+  {
+    path: '/privacy-policy',
+    name: 'privacy-policy',
+    component: () => import('../views/PrivacyPolicyView.vue'),
+  },
 
   {
     path: '/signup',

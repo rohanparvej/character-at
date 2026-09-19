@@ -11,6 +11,7 @@
  * { error } / { data } response shapes, ownership checks before
  * returning anything private.
  */
+const mongoose = require('mongoose')
 const Character = require('../models/Character')
 
 /**
@@ -37,20 +38,27 @@ async function exportLibrary(req, res) {
  * Returns ONE character as JSON. Ownership is checked explicitly —
  * a user must never be able to export a character that isn't theirs
  * just by guessing/changing the :id in the URL.
+ *
+ * :id here is the character's IndexedDB id (see stores/characters.js —
+ * every call site passes character.id, the local crypto.randomUUID()),
+ * which characterController.js stores as `localId`, NOT Mongo's own
+ * _id. We match on localId first; a real ObjectId is also accepted so
+ * this keeps working if something ever links to a character by its
+ * Mongo _id directly.
  */
 async function exportSingleCharacter(req, res) {
   try {
-    const character = await Character.findById(req.params.id)
+    const { id } = req.params
+    const query = { ownerId: req.userId, localId: id }
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      query.$or = [{ localId: id }, { _id: id }]
+      delete query.localId
+    }
+
+    const character = await Character.findOne(query)
 
     if (!character) {
       return res.status(404).json({ error: 'Character not found.' })
-    }
-
-    // Ownership check — this is the same pattern you'll need in
-    // characterController.js for update/delete too: fetch first,
-    // THEN compare ownerId, THEN act. Never trust the :id alone.
-    if (character.ownerId.toString() !== req.userId) {
-      return res.status(403).json({ error: 'You do not have access to this character.' })
     }
 
     res.status(200).json({ character })
