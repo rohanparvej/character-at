@@ -41,13 +41,19 @@
       <p v-if="importMessage" class="dashboard__import-message">{{ importMessage }}</p>
       <p v-if="importError" class="dashboard__import-error">{{ importError }}</p>
 
-      <!-- Cloud library export — only meaningful once characters exist
-           in MongoDB, which requires the sync endpoint you'll build.
-           Button works today, but will return an empty file until then. -->
+      <!-- Cloud sync — "Save All to Cloud" pushes every local character
+           up to MongoDB (single-character equivalent is the "Save to
+           Cloud" button on CharacterDetailView.vue); "Export My Library
+           (Cloud)" then pulls whatever's in MongoDB back down as a file. -->
       <div v-if="authStore.isAuthenticated" class="dashboard__cloud-actions">
+        <button class="dashboard__cloud-btn dashboard__cloud-btn--primary" :disabled="isSavingAll" @click="handleSaveAllToCloud">
+          {{ isSavingAll ? 'Saving…' : 'Save All to Cloud' }}
+        </button>
         <button class="dashboard__cloud-btn" :disabled="isExportingLibrary" @click="handleExportLibrary">
           {{ isExportingLibrary ? 'Exporting…' : 'Export My Library (Cloud)' }}
         </button>
+        <p v-if="saveAllMessage" class="dashboard__import-message">{{ saveAllMessage }}</p>
+        <p v-if="saveAllError" class="dashboard__cloud-error">{{ saveAllError }}</p>
         <p v-if="libraryExportError" class="dashboard__cloud-error">{{ libraryExportError }}</p>
       </div>
 
@@ -128,6 +134,25 @@ async function handleFileSelected(event) {
   } catch (err) {
     importError.value = err.message || 'Could not import that file.'
     console.error(err)
+  }
+}
+
+const isSavingAll = ref(false)
+const saveAllMessage = ref('')
+const saveAllError = ref('')
+
+async function handleSaveAllToCloud() {
+  isSavingAll.value = true
+  saveAllMessage.value = ''
+  saveAllError.value = ''
+  try {
+    const { characters, message } = await characterStore.saveAllToCloud()
+    saveAllMessage.value = message || `Saved ${characters.length} character(s) to your account.`
+  } catch (err) {
+    saveAllError.value = 'Could not save your library to the cloud right now.'
+    console.error(err)
+  } finally {
+    isSavingAll.value = false
   }
 }
 
@@ -269,6 +294,10 @@ async function handleUpdateVisibility({ id, visibility }) {
 
 .dashboard__cloud-actions {
   margin-bottom: 1.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
 }
 
 .dashboard__cloud-btn {
@@ -280,6 +309,13 @@ async function handleUpdateVisibility({ id, visibility }) {
   font-size: 0.8rem;
   cursor: pointer;
   transition: opacity 0.2s ease;
+}
+
+.dashboard__cloud-btn--primary {
+  background: #3fa796;
+  border-color: #3fa796;
+  color: #14131f;
+  font-weight: 600;
 }
 
 .dashboard__cloud-btn:disabled {

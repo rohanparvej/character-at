@@ -42,25 +42,28 @@ function formatUserResponse(user) {
     createdAt: user.createdAt,
   }
 }
+
+function getAuthCookieOptions() {
+  const isProduction = process.env.NODE_ENV === 'production'
+
+  return {
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: isProduction ? 'none' : 'lax',
+  }
+}
+
+
+
+
+
 // Sets the JWT as an httpOnly cookie. httpOnly means JS in the browser
 // can't read it (protects against XSS stealing the token). Called by
 // both signup and login so the cookie config never drifts out of sync.
 function setAuthCookie(res, token) {
-  const isProduction = process.env.NODE_ENV === 'production'
-
-  // FIX: sameSite must be 'none' in production. Locally, frontend and
-  // backend both run on "localhost" (just different ports) — browsers
-  // treat that as same-site, so 'lax' works fine there. In production,
-  // Cloudflare Pages (*.pages.dev) and Render (*.onrender.com) are
-  // genuinely DIFFERENT sites — 'lax' cookies are never sent on
-  // cross-site fetch() requests (only on direct link navigation),
-  // which is why /auth/me was returning 401 and refresh signed you out.
-  // 'none' requires secure: true, which is already true in production.
   res.cookie('token', token, {
-    httpOnly: true,
-    secure: isProduction,
-    sameSite: isProduction ? 'none' : 'lax',
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days, matches JWT expiry above
+    ...getAuthCookieOptions(),
+    maxAge: 7 * 24 * 60 * 60 * 1000,
   })
 }
 
@@ -151,7 +154,7 @@ async function login(req, res) {
  * file — kept here since it's tightly related to signup/login.
  */
 function logout(req, res) {
-  res.clearCookie('token')
+  res.clearCookie('token', getAuthCookieOptions())
   res.status(200).json({ message: 'Logged out.' })
 }
 

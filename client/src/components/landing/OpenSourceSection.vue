@@ -1,8 +1,8 @@
 <!--
   OpenSourceSection.vue
   ------------------------
-  Points to the GitHub repo. Update the href once the real repo exists —
-  it's a placeholder right now.
+  Points to the GitHub repo. Reads GITHUB_URL from config/branding.js —
+  update the repo link there, once, and it updates here + AppFooter.vue.
 -->
 <template>
   <section class="oss">
@@ -13,7 +13,7 @@
         Read the code, file an issue, or open a pull request — every contribution helps.
       </p>
       <a
-        href="https://github.com/"
+        :href="GITHUB_URL"
         target="_blank"
         rel="noopener noreferrer"
         class="oss__link"
@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-// Static section — replace the href above with your real repo URL.
+import { GITHUB_URL } from '../../config/branding'
 </script>
 
 <style scoped>

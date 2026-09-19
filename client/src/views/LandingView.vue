@@ -12,6 +12,7 @@
 -->
 <template>
   <main class="landing">
+    <LandingHeader />
     <HeroSection />
     <FeatureGrid />
     <PrivacySection />
@@ -22,6 +23,7 @@
 </template>
 
 <script setup>
+import LandingHeader from '../components/landing/LandingHeader.vue'
 import HeroSection from '../components/landing/HeroSection.vue'
 import FeatureGrid from '../components/landing/FeatureGrid.vue'
 import PrivacySection from '../components/landing/PrivacySection.vue'

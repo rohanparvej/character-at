@@ -13,6 +13,7 @@
  */
 import { defineStore } from 'pinia'
 import indexedDB from '../utils/indexedDB'
+import characterService from '../services/characterService'
 
 export const useCharacterStore = defineStore('characters', {
   state: () => ({
@@ -87,6 +88,25 @@ export const useCharacterStore = defineStore('characters', {
       }
 
       return { importedCount, renamedCount }
+    },
+
+    /**
+     * Pushes every locally-stored character up to MongoDB in one call
+     * (characterService.saveLibraryToCloud → POST /api/characters/sync).
+     * This is the "export ALL characters to the cloud" action — the
+     * single-character equivalent lives in CharacterDetailView.vue's
+     * handleSaveToCloud, which calls characterService.saveToCloud directly
+     * since it only ever needs the one open character.
+     *
+     * Only meaningful for logged-in users — the calling component is
+     * responsible for checking authStore.isAuthenticated first, same
+     * as every other cloud action in this app.
+     */
+    async saveAllToCloud() {
+      if (this.characters.length === 0) {
+        return { characters: [], message: 'No characters to sync.' }
+      }
+      return characterService.saveLibraryToCloud(this.characters)
     },
   },
 })
